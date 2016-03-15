@@ -1,0 +1,3 @@
+# sinsim
+
+Simple sin simulation
