@@ -38,10 +38,10 @@ project/plugins/project/
 # Mongo Explorer plugin:
 .idea/mongoSettings.xml
 
-## File-based project format:
+# File-based project format:
 *.iws
 
-## Plugin-specific files:
+# Plugin-specific files:
 
 # IntelliJ
 /out/
@@ -57,3 +57,7 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+
+
+tmp/
+.DS_Store
