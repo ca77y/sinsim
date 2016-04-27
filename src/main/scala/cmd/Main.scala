@@ -17,13 +17,18 @@ object Main {
   }
 
   def main( args:Array[String] ):Unit = {
+    Runtime.instance().setCloseVM(true)
     val mainProfile = readProfile(MainConfigFile)
     val agentProfile = readProfile(AgentConfigFile)
     val mainContainer = Runtime.instance().createMainContainer(mainProfile)
     val agentContainer = Runtime.instance().createAgentContainer(agentProfile)
-    for (i <- Range(0, 10) ) {
-      agentContainer.createNewAgent("test" + i, "agent.RousseauAgent", Array())
+    mainContainer.start()
+    agentContainer.start()
+    val matingAgent = agentContainer.createNewAgent("Mating", "agent.MatingAgent", Array())
+    matingAgent.start()
+    for (i <- Range(0, 4) ) {
+      val agent = agentContainer.createNewAgent("Rousseau" + i, "agent.RousseauAgent", Array())
+      agent.start()
     }
-
   }
 }
