@@ -30,5 +30,7 @@ object Main {
       val agent = agentContainer.createNewAgent("Rousseau" + i, "agent.RousseauAgent", Array())
       agent.start()
     }
+    val statsAgent = agentContainer.createNewAgent("Stats", "agent.StatsAgent", Array())
+    statsAgent.start()
   }
 }

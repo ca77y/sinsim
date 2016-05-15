@@ -1,6 +1,6 @@
 package agent
 
-import behaviour.{ConversationTypes, InvestBehaviour, AgentTypes}
+import behaviour.{StatsSenderBehaviour, ConversationTypes, InvestBehaviour, AgentTypes}
 import jade.core.{AID, Agent}
 import jade.domain.FIPAAgentManagement.{DFAgentDescription, ServiceDescription}
 import jade.domain.{DFService, FIPAException}
@@ -79,6 +79,7 @@ class RousseauAgent extends Agent {
     ma match {
       case Some(a) => {
         addBehaviour(new InvestBehaviour(this, a))
+        addBehaviour(new StatsSenderBehaviour(this))
         startInvesting(a)
       }
       case None => logger.severe("Mating agent missing")

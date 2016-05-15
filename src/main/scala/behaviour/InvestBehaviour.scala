@@ -43,7 +43,6 @@ class InvestBehaviour(agent: RousseauAgent, matingAgent: AID) extends CyclicBeha
   def earn(msg: ACLMessage): Unit = {
     val money = msg.getContent.toInt
     agent.earn(money)
-    logger.info(s"Agent: ${myAgent.getName} has ${agent.money} earned $money")
     startInvesting()
   }
 
