@@ -1,4 +1,4 @@
-package behaviour
+package common.behaviour
 
 import jade.core.behaviours.CyclicBehaviour
 import jade.lang.acl.ACLMessage

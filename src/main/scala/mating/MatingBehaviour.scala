@@ -1,5 +1,6 @@
-package behaviour
+package mating
 
+import common.ConversationTypes
 import jade.core.AID
 import jade.core.behaviours.CyclicBehaviour
 import jade.lang.acl.{ACLMessage, MessageTemplate}

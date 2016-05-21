@@ -1,4 +1,4 @@
-package behaviour
+package common
 
 object AgentTypes {
   val MATING = "mating-agent"

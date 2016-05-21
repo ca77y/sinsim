@@ -1,6 +1,8 @@
-package agent
+package rousseau
 
-import behaviour.{StatsSenderBehaviour, ConversationTypes, InvestBehaviour, AgentTypes}
+import behaviour._
+import common.behaviour.{InvestBehaviour, StatsSenderBehaviour, DeathBehaviour}
+import common.{ConversationTypes, AgentTypes}
 import jade.core.{AID, Agent}
 import jade.domain.FIPAAgentManagement.{DFAgentDescription, ServiceDescription}
 import jade.domain.{DFService, FIPAException}
@@ -12,14 +14,29 @@ import scala.util.Random
 class RousseauAgent extends Agent {
   private[this] val logger = Logger.getJADELogger(getClass.getName)
   var money = 100
+  val honesty = Random.nextInt(100)
 
-  def generateProfit(totalAmount: Int) = {
-    math.floor(totalAmount * 1.2).toInt
+  private def generateProfit(investMoney: Int, senderMoney: Int) = {
+    val maxProfit = math.floor((investMoney + senderMoney) * 0.5).toInt
+    val profit = Random.nextInt(maxProfit) - math.floor(maxProfit * 0.5).toInt + 1
+    profit
   }
 
-  def moneyToShare(profit: Int) = {
-    val share = profit / 2
-    earn(share)
+  def profitAndShare(senderMoney: Int): Int = {
+    val investMoney = moneyToInvest()
+    val profit = generateProfit(investMoney, senderMoney)
+    if (profit == 0) {
+      return 0
+    }
+    val split = if(senderMoney == 0) {
+      0
+    } else if (investMoney == 0) {
+      1
+    } else {
+      senderMoney.toDouble / (senderMoney + investMoney).toDouble
+    }
+    val share = math.floor(senderMoney * split).toInt
+    earn(profit - share)
     share
   }
 
@@ -27,8 +44,22 @@ class RousseauAgent extends Agent {
     money += profit
   }
 
+  def consume(): Unit = {
+    money -= 50
+    if (money < 0) {
+      money = 0
+    }
+  }
+
   def moneyToInvest() = {
-    Random.nextInt(10) + 1
+    val invest = Random.nextInt(10) + 1
+    if (money - invest < 0) {
+      val balancedInvest = invest - money
+      money = 0
+      balancedInvest
+    } else {
+      invest
+    }
   }
 
   def matingAgent(): Option[AID] = {
@@ -77,11 +108,11 @@ class RousseauAgent extends Agent {
     registerInDF()
     val ma = matingAgent()
     ma match {
-      case Some(a) => {
+      case Some(a) =>
         addBehaviour(new InvestBehaviour(this, a))
         addBehaviour(new StatsSenderBehaviour(this))
+        addBehaviour(new DeathBehaviour(this, 50))
         startInvesting(a)
-      }
       case None => logger.severe("Mating agent missing")
     }
   }

@@ -1,10 +1,11 @@
-package behaviour
+package common.behaviour
 
-import agent.RousseauAgent
+import common.ConversationTypes
 import jade.core.AID
 import jade.core.behaviours.CyclicBehaviour
 import jade.lang.acl.{ACLMessage, MessageTemplate}
 import jade.util.Logger
+import rousseau.RousseauAgent
 
 class InvestBehaviour(agent: RousseauAgent, matingAgent: AID) extends CyclicBehaviour {
   private[this] val logger = Logger.getJADELogger(getClass.getName)
@@ -28,10 +29,8 @@ class InvestBehaviour(agent: RousseauAgent, matingAgent: AID) extends CyclicBeha
   }
 
   def invest(msg: ACLMessage): Unit = {
-    val money = Integer.valueOf(msg.getContent)
-    val totalAmount = agent.moneyToInvest() + money
-    val profit = agent.generateProfit(totalAmount)
-    val share = agent.moneyToShare(profit)
+    val senderMoney = Integer.valueOf(msg.getContent)
+    val share = agent.profitAndShare(senderMoney)
     val msgToAgent = new ACLMessage(ACLMessage.INFORM)
     msgToAgent.addReceiver(msg.getSender)
     msgToAgent.addReplyTo(myAgent.getAID)

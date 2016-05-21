@@ -1,13 +1,14 @@
-package behaviour
+package stats
 
-import jade.core.{AID, Agent}
+import common.{AgentTypes, ConversationTypes}
+import jade.core.AID
 import jade.core.behaviours.TickerBehaviour
 import jade.domain.FIPAAgentManagement.{DFAgentDescription, ServiceDescription}
 import jade.domain.{DFService, FIPAException}
 import jade.lang.acl.ACLMessage
 import jade.util.Logger
 
-class StatsPingBehaviour(agent: Agent, tick: Long) extends TickerBehaviour(agent, tick) {
+class StatsPingBehaviour(agent: StatsAgent, tick: Long) extends TickerBehaviour(agent, tick) {
   private[this] val logger = Logger.getJADELogger(getClass.getName)
 
   def findAgents(): Seq[AID] = {
@@ -35,6 +36,7 @@ class StatsPingBehaviour(agent: Agent, tick: Long) extends TickerBehaviour(agent
   }
 
   override def onTick(): Unit = {
+    agent.nextTurn()
     val agents = findAgents()
     for (agent <- agents) {
       askForStats(agent)
