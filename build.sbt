@@ -6,7 +6,7 @@ scalaVersion := "2.11.8"
 
 cancelable in Global := true
 
-mainClass in (Compile, run) := Some("cmd.Main")
+mainClass in(Compile, run) := Some("sinsim.cmd.Main")
 
 resolvers += "tilab" at "http://jade.tilab.com/maven"
 
