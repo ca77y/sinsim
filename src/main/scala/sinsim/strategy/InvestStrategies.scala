@@ -3,6 +3,8 @@ package sinsim.strategy
 import sinsim.agent.Wallet
 import sinsim.common.EnvironmentConstants
 
+import scala.util.Random
+
 object InvestStrategies {
 
   sealed trait InvestStrategy {
@@ -50,11 +52,15 @@ object InvestStrategies {
 
   class CheatAndCheckInvestStrategy extends CheatInvestStrategy {
     override def validate(w1: Wallet, p1: Int, w2: Wallet, p2: Int) = {
-      val (vp2, vp1) = calculateProfit(w2, w1)
-      if (p1 == vp1 && p2 == vp2) {
-        (true, true)
+      if (Random.nextInt(100) > w1.awareness) {
+        (true, false)
       } else {
-        (false, true)
+        val (vp2, vp1) = calculateProfit(w2, w1)
+        if (p1 == vp1 && p2 == vp2) {
+          (true, true)
+        } else {
+          (false, true)
+        }
       }
     }
   }

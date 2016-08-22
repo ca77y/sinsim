@@ -1,7 +1,7 @@
 package sinsim.common
 
 object EnvironmentConstants {
-  val SOVEREIGN_COST = 10
+  val SOVEREIGN_COST = 5
   val SOVEREIGN_FACTOR = 0.2
   val CHEATER_PREMIUM = 50
   val CHEATER_PENALTY = -50

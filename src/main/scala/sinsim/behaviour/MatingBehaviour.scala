@@ -113,12 +113,17 @@ object MatingBehaviour {
       wallet.balance(EnvironmentConstants.CHEATER_PENALTY)
     }
 
+    def end(msg: ACLMessage): Unit = {
+      strategy.cleanup(wallet)
+    }
+
     override def handleMessage(msg: ACLMessage): Unit = {
       msg.getPerformative match {
         case ACLMessage.REQUEST => foundMate(msg)
         case ACLMessage.PROPOSE => mate(msg)
         case ACLMessage.ACCEPT_PROPOSAL => invest(msg)
         case ACLMessage.FAILURE => cheater(msg)
+        case ACLMessage.INFORM => end(msg)
         case _ => logger.severe(s"Unknown message $msg")
       }
     }

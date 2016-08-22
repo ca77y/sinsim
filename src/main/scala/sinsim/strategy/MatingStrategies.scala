@@ -1,6 +1,7 @@
 package sinsim.strategy
 
 import jade.core.AID
+import sinsim.agent.Wallet
 import sinsim.common.EnvironmentConstants
 
 import scala.collection.mutable
@@ -10,6 +11,8 @@ object MatingStrategies {
 
 
   sealed trait MatingStrategy {
+    def cleanup(wallet: Wallet): Unit
+
     def cost: Int
 
     def quarantine(agent: AID)
@@ -27,6 +30,8 @@ object MatingStrategies {
     def trust(agent: AID) = {}
 
     override def quarantine(agent: AID): Unit = {}
+
+    def cleanup(wallet: Wallet): Unit = {}
   }
 
   class MemoryMatingStrategy extends MatingStrategy {
@@ -46,6 +51,8 @@ object MatingStrategies {
     override def quarantine(agent: AID): Unit = {
       badAgents += agent.getLocalName
     }
+
+    def cleanup(wallet: Wallet): Unit = {}
   }
 
   class SovereignMatingStrategy() extends MatingStrategy {
@@ -77,6 +84,11 @@ object MatingStrategies {
         }
       }
       (true, 0)
+    }
+
+    def cleanup(wallet: Wallet): Unit = {
+      val change = SovereignMatingProperties.bank / EnvironmentConstants.NUMBER_OF_AGENTS
+      wallet.balance(change)
     }
   }
 

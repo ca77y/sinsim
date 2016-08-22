@@ -31,6 +31,7 @@ trait BaseExperiment {
     val statsAgent = agentContainer.createNewAgent("Stats", "sinsim.agent.StatsAgent", Array())
     statsAgent.start()
     val matingAgent = agentContainer.createNewAgent("Mating", "sinsim.agent.MatingAgent", Array())
+    Thread.sleep(3000)
     for (i <- Range(0, EnvironmentConstants.NUMBER_OF_AGENTS) ) {
       val agent = agentContainer.createNewAgent("Invest" + i, agentName, Array())
       agent.start()
