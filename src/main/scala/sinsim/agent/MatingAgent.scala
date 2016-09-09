@@ -1,6 +1,6 @@
 package sinsim.agent
 
-import sinsim.behaviour.MatingBehaviour
+import sinsim.behaviour.{GeneticBehaviour, MatingBehaviour}
 import sinsim.common.AgentTypes
 import jade.util.Logger
 
@@ -13,6 +13,7 @@ class MatingAgent extends BaseAgent {
 
     val agents = findAgents(AgentTypes.INVEST)
     addBehaviour(MatingBehaviour.supervisor(agents))
+    addBehaviour(GeneticBehaviour.supervisor(agents))
     addBehaviour(MatingBehaviour.init())
   }
 }

@@ -5,4 +5,5 @@ case object ConversationTypes {
   val MATING: ConversationType = "mating"
   val INVESTING: ConversationType = "investing"
   val STATS: ConversationType = "stats"
+  val GENETIC: ConversationType = "genetic"
 }

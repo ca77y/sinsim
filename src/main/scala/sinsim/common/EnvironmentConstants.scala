@@ -11,7 +11,7 @@ object EnvironmentConstants {
   val MAX_SKILL = 100
   val INIT_MONEY = 1000
   val INVEST_FACTOR = 0.1
-  val NUMBER_OF_TURNS = 1000
-
+  val NUMBER_OF_TURNS = 500
+  var NUMBER_OF_GENERATIONS = 10
   var NUMBER_OF_AGENTS = 10
 }

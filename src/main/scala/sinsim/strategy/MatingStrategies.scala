@@ -31,7 +31,9 @@ object MatingStrategies {
 
     override def quarantine(agent: AID): Unit = {}
 
-    def cleanup(wallet: Wallet): Unit = {}
+    def cleanup(wallet: Wallet): Unit = {
+      wallet.money = 1000
+    }
   }
 
   class MemoryMatingStrategy extends MatingStrategy {
@@ -52,7 +54,11 @@ object MatingStrategies {
       badAgents += agent.getLocalName
     }
 
-    def cleanup(wallet: Wallet): Unit = {}
+    def cleanup(wallet: Wallet): Unit = {
+      badAgents.clear()
+      goodAgents.clear()
+      wallet.money = 1000
+    }
   }
 
   class SovereignMatingStrategy() extends MatingStrategy {
@@ -87,8 +93,10 @@ object MatingStrategies {
     }
 
     def cleanup(wallet: Wallet): Unit = {
-      val change = SovereignMatingProperties.bank / EnvironmentConstants.NUMBER_OF_AGENTS
-      wallet.balance(change)
+      badAgents.clear()
+      goodAgents.clear()
+      wallet.money = 1000
+      SovereignMatingProperties.bank = 0
     }
   }
 

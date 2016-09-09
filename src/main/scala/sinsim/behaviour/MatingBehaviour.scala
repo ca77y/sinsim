@@ -29,10 +29,11 @@ object MatingBehaviour {
     val len = agents.length / 2
     var turn = 0
     var turnTick = 1
+    var gen = 0
 
     def initMating(): Unit = {
       turn = turn + 1
-      logger.info(s"turn: $turn")
+      logger.fine(s"turn: $turn")
       val randomAgents = Random.shuffle(agents)
       val senders = randomAgents.take(len)
       val receivers = randomAgents.takeRight(len)
@@ -41,9 +42,18 @@ object MatingBehaviour {
       }
     }
 
+    def newGeneration(): Unit = {
+      gen = gen + 1
+      logger.info(s"generation: $gen")
+      for (agent <- agents) {
+        sendMessage(ConversationTypes.GENETIC, agent, ACLMessage.SUBSCRIBE)
+        sendMessage(ConversationTypes.STATS, agent, ACLMessage.INFORM, gen.toString)
+      }
+    }
+
     def doneMating(): Unit = {
       for (agent <- agents) {
-        sendMessage(ConversationTypes.STATS, agent, ACLMessage.REQUEST)
+        sendMessage(ConversationTypes.STATS, agent, ACLMessage.REQUEST, gen.toString)
       }
     }
 
@@ -57,6 +67,10 @@ object MatingBehaviour {
             if (turn < EnvironmentConstants.NUMBER_OF_TURNS) {
               turnTick = 1
               initMating()
+            } else if(gen < EnvironmentConstants.NUMBER_OF_GENERATIONS) {
+              turnTick = 1
+              turn = 0
+              newGeneration()
             } else {
               logger.info(s"simulation done on turn: $turn")
               doneMating()
@@ -113,17 +127,12 @@ object MatingBehaviour {
       wallet.balance(EnvironmentConstants.CHEATER_PENALTY)
     }
 
-    def end(msg: ACLMessage): Unit = {
-      strategy.cleanup(wallet)
-    }
-
     override def handleMessage(msg: ACLMessage): Unit = {
       msg.getPerformative match {
         case ACLMessage.REQUEST => foundMate(msg)
         case ACLMessage.PROPOSE => mate(msg)
         case ACLMessage.ACCEPT_PROPOSAL => invest(msg)
         case ACLMessage.FAILURE => cheater(msg)
-        case ACLMessage.INFORM => end(msg)
         case _ => logger.severe(s"Unknown message $msg")
       }
     }
