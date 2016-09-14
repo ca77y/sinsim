@@ -1,3 +1,3 @@
 # sinsim
 
-Simple sin simulation
+Simulation of Hobbes and Rousseau social systems
